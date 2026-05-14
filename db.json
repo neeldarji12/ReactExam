@@ -1,0 +1,47 @@
+{
+  "students": [
+    {
+      "name": "Neel darji",
+      "roll": "1",
+      "class": "12-A",
+      "id": "d9prGA5G6As"
+    },
+    {
+      "name": "Harshit Ladumor",
+      "roll": "2",
+      "class": "12-A",
+      "id": "UDwn7WM4aIM"
+    },
+    {
+      "name": "Maulik patel",
+      "roll": "3",
+      "class": "12-A",
+      "id": "oiMX3mc1XSU"
+    },
+    {
+      "name": "Rohit Patel",
+      "roll": "4",
+      "class": "12-A",
+      "id": "NaSkjXL1VPc"
+    },
+    {
+      "name": "Jaimit Patel",
+      "roll": "5",
+      "class": "12-A",
+      "id": "QnuAGBbDZms"
+    },
+    {
+      "name": "Kurup Sudagara",
+      "roll": "6",
+      "class": "12-A",
+      "id": "ZyCg0GEGoJ8"
+    },
+    {
+      "name": "John Wick",
+      "roll": "7",
+      "class": "12-A",
+      "id": "Dh5StZ6Wbu0"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

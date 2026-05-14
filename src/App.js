@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 
-function App() {
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from 'react-router-dom';
+
+import { Provider } from 'react-redux';
+
+import { store } from './Components/Redux/store';
+
+import Navbar from './Components/Navbar';
+
+import StudentsList from './Components/StudentsList';
+
+import StudentForm from './Components/StudentForm';
+
+import Login from './Components/Login';
+
+import PrivateRoute from './Components/PrivateRoute';
+
+export default function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+    <Provider store={store}>
+
+      <BrowserRouter>
+
+        <Navbar />
+
+        <Routes>
+
+          <Route
+            path='/'
+            element={<StudentsList />}
+          />
+
+          <Route
+            path='/login'
+            element={<Login />}
+          />
+
+          <Route
+            path='/add'
+            element={
+              <PrivateRoute>
+                <StudentForm />
+              </PrivateRoute>
+            }
+          />
+
+        </Routes>
+
+      </BrowserRouter>
+
+    </Provider>
   );
 }
-
-export default App;
