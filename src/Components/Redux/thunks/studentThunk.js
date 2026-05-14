@@ -30,3 +30,47 @@ export const addStudent = (student) => {
         });
     };
 };
+
+export const deleteStudent = (id) => {
+
+    return async (dispatch) => {
+
+        await fetch(
+            `http://localhost:5000/students/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        dispatch({
+            type: "DELETE_STUDENT",
+            payload: id
+        });
+    };
+};
+
+export const updateStudent = (student) => {
+
+    return async (dispatch) => {
+
+        const res = await fetch(
+            `http://localhost:5000/students/${student.id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(student)
+            }
+        );
+
+        const data = await res.json();
+
+        dispatch({
+            type: "UPDATE_STUDENT",
+            payload: data
+        });
+    };
+};
