@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+    useEffect,
+    useState
+} from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import {
+    useDispatch,
+    useSelector
+} from 'react-redux';
 
-import { fetchStudents } from './Redux/thunks/studentThunk';
+import {
+    fetchStudents,
+    deleteStudent,
+    updateStudent
+} from './Redux/thunks/studentThunk';
 
 export default function StudentsList() {
 
@@ -11,9 +21,15 @@ export default function StudentsList() {
     const { students } =
         useSelector(state => state.students);
 
-    const [search, setSearch] = useState("");
+    const [editId, setEditId] =
+        useState(null);
 
-    const [sortType, setSortType] = useState("");
+    const [editForm, setEditForm] =
+        useState({
+            name: "",
+            roll: "",
+            class: ""
+        });
 
     useEffect(() => {
 
@@ -21,27 +37,37 @@ export default function StudentsList() {
 
     }, [dispatch]);
 
-    // Searching
-    let filteredStudents = students.filter((student) =>
-        student.name.toLowerCase().includes(
-            search.toLowerCase()
-        )
-    );
+    // DELETE
 
-    // Sorting
-    if (sortType === "name") {
+    const handleDelete = (id) => {
 
-        filteredStudents.sort((a, b) =>
-            a.name.localeCompare(b.name)
-        );
-    }
+        dispatch(deleteStudent(id));
+    };
 
-    if (sortType === "roll") {
+    // EDIT BUTTON
 
-        filteredStudents.sort((a, b) =>
-            a.roll - b.roll
-        );
-    }
+    const handleEdit = (student) => {
+
+        setEditId(student.id);
+
+        setEditForm({
+            name: student.name,
+            roll: student.roll,
+            class: student.class
+        });
+    };
+
+    // UPDATE
+
+    const handleUpdate = (id) => {
+
+        dispatch(updateStudent({
+            id,
+            ...editForm
+        }));
+
+        setEditId(null);
+    };
 
     return (
         <div className='container mt-4'>
@@ -50,63 +76,108 @@ export default function StudentsList() {
                 Students List
             </h1>
 
-            {/* Search Input */}
-
-            <input
-                type='text'
-                placeholder='Search Student Name'
-                className='form-control mb-3'
-                value={search}
-                onChange={(e) =>
-                    setSearch(e.target.value)
-                }
-            />
-
-            {/* Sorting */}
-
-            <select
-                className='form-select mb-4'
-                value={sortType}
-                onChange={(e) =>
-                    setSortType(e.target.value)
-                }
-            >
-
-                <option value="">
-                    Sort By
-                </option>
-
-                <option value="name">
-                    Name
-                </option>
-
-                <option value="roll">
-                    Roll Number
-                </option>
-
-            </select>
-
-            {/* Student Data */}
-
             {
-                filteredStudents.map((student) => (
+                students.map((student) => (
 
                     <div
                         key={student.id}
                         className='card p-3 mb-3'
                     >
 
-                        <h3>{student.name}</h3>
+                        {
+                            editId === student.id ? (
 
-                        <p>
-                            Roll :
-                            {student.roll}
-                        </p>
+                                <div>
 
-                        <p>
-                            Class :
-                            {student.class}
-                        </p>
+                                    <input
+                                        type='text'
+                                        className='form-control mb-2'
+                                        value={editForm.name}
+                                        onChange={(e) =>
+                                            setEditForm({
+                                                ...editForm,
+                                                name:
+                                                    e.target.value
+                                            })
+                                        }
+                                    />
+
+                                    <input
+                                        type='text'
+                                        className='form-control mb-2'
+                                        value={editForm.roll}
+                                        onChange={(e) =>
+                                            setEditForm({
+                                                ...editForm,
+                                                roll:
+                                                    e.target.value
+                                            })
+                                        }
+                                    />
+
+                                    <input
+                                        type='text'
+                                        className='form-control mb-2'
+                                        value={editForm.class}
+                                        onChange={(e) =>
+                                            setEditForm({
+                                                ...editForm,
+                                                class:
+                                                    e.target.value
+                                            })
+                                        }
+                                    />
+
+                                    <button
+                                        className='btn btn-success me-2'
+                                        onClick={() =>
+                                            handleUpdate(student.id)
+                                        }
+                                    >
+                                        Save
+                                    </button>
+
+                                </div>
+
+                            ) : (
+
+                                <div>
+
+                                    <h3>
+                                        {student.name}
+                                    </h3>
+
+                                    <p>
+                                        Roll :
+                                        {student.roll}
+                                    </p>
+
+                                    <p>
+                                        Class :
+                                        {student.class}
+                                    </p>
+
+                                    <button
+                                        className='btn btn-warning me-2'
+                                        onClick={() =>
+                                            handleEdit(student)
+                                        }
+                                    >
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        className='btn btn-danger'
+                                        onClick={() =>
+                                            handleDelete(student.id)
+                                        }
+                                    >
+                                        Delete
+                                    </button>
+
+                                </div>
+                            )
+                        }
 
                     </div>
                 ))
